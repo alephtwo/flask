@@ -20,7 +20,36 @@ defmodule Flask.WoW do
   def region_leaderboard, do: call "challenge/region"
 
   # Character Profile
-  # TODO: Add character endpoints
+  def character(realm, name), do: character(realm, name, [])
+  def character(realm, name, fields) when is_list(fields) do
+    valid_fields = ~w(
+      achievements
+      appearance
+      feed
+      guild
+      hunterPets
+      items
+      mounts
+      pets
+      petSlots
+      progression
+      pvp
+      quests
+      reputation
+      statistics
+      stats
+      talents
+      titles
+      audit
+    )a
+
+    queries = %{
+      fields: fields
+              |> Enum.filter(fn x -> Enum.member?(valid_fields, x) end)
+              |> Enum.join(",")
+    }
+    call "character/#{realm}/#{name}", queries
+  end
 
   # Guild Profile
   # TODO: Add guild endpoints

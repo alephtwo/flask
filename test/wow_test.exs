@@ -1,26 +1,23 @@
 defmodule FlaskTest.WoW do
   use ExUnit.Case
-  doctest Flask.WoW
+  import FlaskTest
   alias Flask.WoW, as: WoW
-
-  test "the truth" do
-    assert 1 + 1 == 2
-  end
+  doctest Flask.WoW
 
   # Achievements
   @tag external: true
-  test "achievement", do: assert {:ok, _} = WoW.achievement(6)
+  test "achievement", do: assert_ok(WoW.achievement(6))
 
   # Auctions
   # TODO: Consume JSON file if successful
   @tag external: true
-  test "auctions", do: assert {:ok, _} = WoW.auctions("mal'ganis")
+  test "auctions", do: assert_ok(WoW.auctions("mal'ganis"))
 
   # Bosses
   @tag external: true
-  test "boss", do: assert {:ok, _} = WoW.boss(110929)
+  test "boss", do: assert_ok(WoW.boss(110929))
   @tag external: true
-  test "bosses", do: assert {:ok, _} = WoW.bosses
+  test "bosses", do: assert_ok(WoW.bosses)
 
   # # Challenge Mode
   # TODO: These time out...
@@ -68,23 +65,23 @@ defmodule FlaskTest.WoW do
 
   # # Misc. Data
   @tag external: true
-  test "battlegroups", do: assert {:ok, _} = WoW.battlegroups
+  test "battlegroups", do: assert_ok(WoW.battlegroups)
   @tag external: true
-  test "character_races", do: assert {:ok, _} = WoW.character_races
+  test "character_races", do: assert_ok(WoW.character_races)
   @tag external: true
-  test "character_classes", do: assert {:ok, _} = WoW.character_classes
+  test "character_classes", do: assert_ok(WoW.character_classes)
   @tag external: true
-  test "character_achievements", do: assert {:ok, _} = WoW.character_achievements
+  test "character_achievements", do: assert_ok(WoW.character_achievements)
   @tag external: true
-  test "guild_rewards", do: assert {:ok, _} = WoW.guild_rewards
+  test "guild_rewards", do: assert_ok(WoW.guild_rewards)
   @tag external: true
-  test "guild_perks", do: assert {:ok, _} = WoW.guild_perks
+  test "guild_perks", do: assert_ok(WoW.guild_perks)
   @tag external: true
-  test "guild_achievements", do: assert {:ok, _} = WoW.guild_achievements
+  test "guild_achievements", do: assert_ok(WoW.guild_achievements)
   @tag external: true
-  test "item_classes", do: assert {:ok, _} = WoW.item_classes
+  test "item_classes", do: assert_ok(WoW.item_classes)
   @tag external: true
-  test "talents", do: assert {:ok, _} = WoW.talents
+  test "talents", do: assert_ok(WoW.talents)
   @tag external: true
-  test "pet_types", do: assert {:ok, _} = WoW.pet_types
+  test "pet_types", do: assert_ok(WoW.pet_types)
 end

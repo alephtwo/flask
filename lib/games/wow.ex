@@ -8,8 +8,18 @@ defmodule Flask.WoW do
   def achievement(id) when is_integer(id), do: call "achievement/#{id}"
 
   # Auctions
-  # TODO: Consume JSON file if successful
-  def auctions(realm), do: call "auction/data/#{realm}"
+  def auctions(realm) do
+    case call "auction/data/#{realm}" do
+      {:ok, response} ->
+        data_url = response[:files] |> List.first |> Map.get("url")
+        case HTTPoison.get(data_url) do
+          {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
+            Poison.decode!(body)
+          {:error, %HTTPoison.Error{reason: reason}} ->
+            {:error, reason}
+        end
+    end
+  end
 
   # Bosses
   def boss(id), do: call "boss/#{id}"
@@ -42,7 +52,6 @@ defmodule Flask.WoW do
       titles
       audit
     )a
-
     queries = %{
       fields: fields
               |> Enum.filter(fn x -> Enum.member?(valid_fields, x) end)
@@ -51,8 +60,17 @@ defmodule Flask.WoW do
     call "character/#{realm}/#{name}", queries
   end
 
-  # Guild Profile
-  # TODO: Add guild endpoints
+  # Guild Profiles
+  def guild(realm, name), do: guild(realm, name, [])
+  def guild(realm, name, fields) when is_list(fields) do
+    valid_fields = ~w(achievements members news challenge)a
+    queries = %{
+      fields: fields
+              |> Enum.filter(fn x -> Enum.member?(valid_fields, x) end)
+              |> Enum.join(",")
+    }
+    call "guild/#{realm}/#{name}", queries
+  end
 
   # Items
   def item(id), do: call "item/#{id}"
@@ -69,16 +87,11 @@ defmodule Flask.WoW do
 
   # PvP
   def leaderboards(bracket) do
-    valid =
-      bracket == "2v2"
-      || bracket == "3v3"
-      || bracket == "5v5"
-      || bracket == "rbg"
-
-    if valid do
+    valid_brackets = ~w(2v2 3v3 5v5 rbg)
+    unless Enum.member?(valid_brackets, bracket) do
       call "leaderboard/#{bracket}"
     else
-      {:error, "Invalid bracket. Must be 2v2, 3v3, 5v5, or rbg."}
+      {:error, "Invalid bracket. [#{Enum.join(valid_brackets, ", ")}]"}
     end
   end
 

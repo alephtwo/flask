@@ -1,4 +1,4 @@
-defmodule FlaskWoWTest do
+defmodule FlaskTest.WoW do
   use ExUnit.Case
   doctest Flask.WoW
   alias Flask.WoW, as: WoW
@@ -8,14 +8,18 @@ defmodule FlaskWoWTest do
   end
 
   # Achievements
+  @tag external: true
   test "achievement", do: assert {:ok, _} = WoW.achievement(6)
 
   # Auctions
   # TODO: Consume JSON file if successful
+  @tag external: true
   test "auctions", do: assert {:ok, _} = WoW.auctions("mal'ganis")
 
   # Bosses
+  @tag external: true
   test "boss", do: assert {:ok, _} = WoW.boss(110929)
+  @tag external: true
   test "bosses", do: assert {:ok, _} = WoW.bosses
 
   # # Challenge Mode
@@ -63,14 +67,24 @@ defmodule FlaskWoWTest do
   # def zone(id), do: call "zone/#{id}"
 
   # # Misc. Data
-  # def battlegroups, do: call "data/battlegroups/" # Note the trailing slash
-  # def character_races, do: call "data/character/races"
-  # def character_classes, do: call "data/character/classes"
-  # def character_achievements, do: call "data/character/achievements"
-  # def guild_rewards, do: call "data/guild/rewards"
-  # def guild_perks, do: call "data/guild/perks"
-  # def guild_achievements, do: call "data/guild/achievements"
-  # def item_classes, do: call "data/item/classes"
-  # def talents, do: call "data/talents"
-  # def pet_types, do: call "data/pet/types"
+  @tag external: true
+  test "battlegroups", do: assert {:ok, _} = WoW.battlegroups
+  @tag external: true
+  test "character_races", do: assert {:ok, _} = WoW.character_races
+  @tag external: true
+  test "character_classes", do: assert {:ok, _} = WoW.character_classes
+  @tag external: true
+  test "character_achievements", do: assert {:ok, _} = WoW.character_achievements
+  @tag external: true
+  test "guild_rewards", do: assert {:ok, _} = WoW.guild_rewards
+  @tag external: true
+  test "guild_perks", do: assert {:ok, _} = WoW.guild_perks
+  @tag external: true
+  test "guild_achievements", do: assert {:ok, _} = WoW.guild_achievements
+  @tag external: true
+  test "item_classes", do: assert {:ok, _} = WoW.item_classes
+  @tag external: true
+  test "talents", do: assert {:ok, _} = WoW.talents
+  @tag external: true
+  test "pet_types", do: assert {:ok, _} = WoW.pet_types
 end

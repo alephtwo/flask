@@ -33,10 +33,12 @@ defmodule Flask.WoW do
   def mounts, do: call "mount"
 
   # Pets
-  # TODO: Add Pets endpoints
+  def pets, do: call "pet/"
+  def pet_abilities(id), do: call "pet/ability/#{id}"
+  def pet_species(id), do: call "pet/species/#{id}"
+  def pet_stats(id), do: call "pet/stats/#{id}"
 
   # PvP
-  # TODO: match bracket as 2v2, 3v3, 5v5, rbg
   def leaderboards(bracket) do
     valid =
       bracket == "2v2"

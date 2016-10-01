@@ -1,4 +1,9 @@
 defmodule Flask.WoW do
+  @moduledoc """
+  Interface to the Battle.net World of Warcraft API.
+  """
+  alias Flask.API, as: API
+
   # Achievements
   def achievement(id) when is_integer(id), do: call "achievement/#{id}"
 
@@ -32,15 +37,27 @@ defmodule Flask.WoW do
 
   # PvP
   # TODO: match bracket as 2v2, 3v3, 5v5, rbg
-  def leaderboards(bracket), do: call "leaderboard/#{bracket}"
+  def leaderboards(bracket) do
+    valid =
+      bracket == "2v2"
+      || bracket == "3v3"
+      || bracket == "5v5"
+      || bracket == "rbg"
+
+    if valid do
+      call "leaderboard/#{bracket}"
+    else
+      {:error, "Invalid bracket. Must be 2v2, 3v3, 5v5, or rbg."}
+    end
+  end
 
   # Quests
   def quest(id), do: call "quest/#{id}"
 
   # Realm Status
   def realms, do: realm_status([])
-  def realm_status(realms) do
-    queries = %{realms: realms |> List.wrap |> Enum.join(",")}
+  def realm_status(inquiry) do
+    queries = %{realms: inquiry |> List.wrap |> Enum.join(",")}
     call "realm/status", queries
   end
 
@@ -69,6 +86,6 @@ defmodule Flask.WoW do
   # Private helpers
   defp call(endpoint), do: call(endpoint, %{})
   defp call(endpoint, queries) when is_map(queries) do
-    Flask.API.fetch("/wow/#{URI.encode endpoint}", queries)
+    API.fetch("/wow/#{URI.encode endpoint}", queries)
   end
 end

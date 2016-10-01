@@ -17,7 +17,8 @@ defmodule Flask.Mixfile do
   defp deps do
     [
       {:httpoison, "~> 0.9.2"},
-      {:poison, "~> 2.2.0"}
+      {:poison, "~> 2.2.0"},
+      {:credo, "~> 0.4", only: [:dev, :test]}
     ]
   end
 end

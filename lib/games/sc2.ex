@@ -1,4 +1,9 @@
 defmodule SC2 do
+  @moduledoc """
+  Interface to the Battle.net Starcraft 2 API.
+  """
+  alias Flask.API, as: API
+
   # Profile API
   def profile(id, region, name), do: call "profile/#{id}/#{region}/#{name}"
   def ladders(id, region, name) do
@@ -18,6 +23,6 @@ defmodule SC2 do
   # Private helpers
   defp call(endpoint), do: call(endpoint, %{})
   defp call(endpoint, queries) when is_map(queries) do
-    Flask.API.fetch("/sc2/#{URI.encode endpoint}", queries)
+    API.fetch("/sc2/#{URI.encode endpoint}", queries)
   end
 end

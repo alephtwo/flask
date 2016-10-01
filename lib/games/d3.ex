@@ -1,4 +1,9 @@
 defmodule Flask.D3 do
+  @moduledoc """
+  Interface to the Battle.net Diablo 3 API.
+  """
+  alias Flask.API, as: API
+
   # Profile API
   def career_profile(battletag), do: call "profile/#{battletag}"
   def hero_profile(battletag, id), do: call "profile/#{battletag}/hero/#{id}"
@@ -11,6 +16,6 @@ defmodule Flask.D3 do
   # Private helpers
   defp call(endpoint), do: call(endpoint, %{})
   defp call(endpoint, queries) when is_map(queries) do
-    Flask.API.fetch("/d3/#{URI.encode endpoint}", queries)
+    API.fetch("/d3/#{URI.encode endpoint}", queries)
   end
 end

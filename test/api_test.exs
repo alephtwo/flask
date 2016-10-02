@@ -1,6 +1,6 @@
 defmodule FlaskTest.API do
   use ExUnit.Case
-  import FlaskTest
+  import FlaskTest.Macros
   alias Flask.API, as: API
   doctest Flask.API
 

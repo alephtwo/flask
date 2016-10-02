@@ -1,8 +1,8 @@
-defmodule Flask.WoW do
+defmodule Flask do
   @moduledoc """
   Interface to the Battle.net World of Warcraft API.
   """
-  alias Flask.API, as: API
+  alias Flask.API
 
   defmacro unwrap(call, atom) do
     quote do

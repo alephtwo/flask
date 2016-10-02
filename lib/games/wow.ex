@@ -101,10 +101,9 @@ defmodule Flask.WoW do
   # PvP
   def leaderboards(bracket) do
     valid_brackets = ~w(2v2 3v3 5v5 rbg)
-    unless Enum.member?(valid_brackets, bracket) do
-      call "leaderboard/#{bracket}"
-    else
-      {:error, "Invalid bracket. [#{Enum.join(valid_brackets, ", ")}]"}
+    case Enum.member?(valid_brackets, bracket) do
+      true -> call "leaderboard/#{bracket}"
+      _ -> {:error, "Invalid bracket. [#{Enum.join(valid_brackets, ", ")}]"}
     end
   end
 

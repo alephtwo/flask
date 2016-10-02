@@ -14,7 +14,7 @@ defmodule Flask.WoW do
         data_url = response[:files] |> List.first |> Map.get("url")
         case HTTPoison.get(data_url) do
           {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
-            Poison.decode!(body)
+            {:ok, Poison.decode!(body)}
           {:error, %HTTPoison.Error{reason: reason}} ->
             {:error, reason}
         end
@@ -77,7 +77,7 @@ defmodule Flask.WoW do
   def item_set(id), do: call "item/set/#{id}"
 
   # Mounts
-  def mounts, do: call "mount"
+  def mounts, do: call "mount/"
 
   # Pets
   def pets, do: call "pet/"
@@ -112,7 +112,7 @@ defmodule Flask.WoW do
   def spell(id), do: call "spell/#{id}"
 
   # Zones
-  def zones, do: call "zone"
+  def zones, do: call "zone/"
   def zone(id), do: call "zone/#{id}"
 
   # Misc. Data

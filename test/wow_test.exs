@@ -9,7 +9,6 @@ defmodule FlaskTest.WoW do
   test "achievement", do: assert_ok(WoW.achievement(6))
 
   # Auctions
-  # TODO: Consume JSON file if successful
   @tag external: true
   test "auctions", do: assert_ok(WoW.auctions("mal'ganis"))
 
@@ -19,51 +18,74 @@ defmodule FlaskTest.WoW do
   @tag external: true
   test "bosses", do: assert_ok(WoW.bosses)
 
-  # # Challenge Mode
-  # TODO: These time out...
+  # Challenge Mode
+  # TODO: These time out for right now.
   # def realm_leaderboard(realm), do: call "challenge/#{realm}"
   # def region_leaderboard, do: call "challenge/region"
 
   # Character Profile
-  # TODO: Add character endpoints
+  @tag external: true
+  test "character", do: assert_ok(WoW.character("mal'ganis", "gurgthock"))
 
   # Guild Profile
-  # TODO: Add guild endpoints
+  @tag external: true
+  test "guild", do: assert_ok(WoW.guild("mal'ganis", "elitist jerks"))
 
   # Items
   # def item(id), do: call "item/#{id}"
+  @tag external: true
+  test "item", do: assert_ok(WoW.item(16833))
   # def item_set(id), do: call "item/set/#{id}"
+  @tag external: true
+  test "item_set", do: assert_ok(WoW.item_set(1060))
 
   # Mounts
-  # def mounts, do: call "mount"
+  @tag external: true
+  test "mounts", do: assert_ok(WoW.mounts)
 
   # Pets
-  # def pets, do: call "pet/"
-  # def pet_abilities(id), do: call "pet/ability/#{id}"
-  # def pet_species(id), do: call "pet/species/#{id}"
-  # def pet_stats(id), do: call "pet/stats/#{id}"
+  @tag external: true
+  test "pets", do: assert_ok(WoW.pets)
+  @tag external: true
+  test "pet_abilities", do: assert_ok(WoW.pet_abilities(640))
+  @tag external: true
+  test "pet_species", do: assert_ok(WoW.pet_species(640))
+  @tag external: true
+  test "pet_stats", do: assert_ok(WoW.pet_stats(640))
 
   # PvP
-  # def leaderboards(bracket) do
+  @tag external: true
+  test "leaderboards", do: assert_ok(WoW.leaderboards('2v2'))
 
   # Quests
-  # def quest(id), do: call "quest/#{id}"
+  @tag external: true
+  test "quest", do: assert_ok(WoW.quest(13146))
 
   # Realm Status
-  # def realms, do: realm_status([])
-  # def realm_status(inquiry) do
+  @tag external: true
+  test "realms", do: assert_ok(WoW.realms)
+  @tag external: true
+  test "realm_status", do: assert_ok(WoW.realm_status("mal'ganis"))
+  @tag external: true
+  test "realm status (multiple realms)" do
+    assert_ok(WoW.realm_status(~w(mal'ganis illidan greymane)))
+  end
 
   # Recipes
-  # def recipe(id), do: call "recipe/#{id}"
+  @tag external: true
+  test "recipe", do: assert_ok(WoW.recipe(33994))
 
   # Spells
-  # def spell(id), do: call "spell/#{id}"
+  @tag external: true
+  test "spell", do: assert_ok(WoW.spell(5))
 
   # Zones
-  # def zones, do: call "zone"
-  # def zone(id), do: call "zone/#{id}"
+  @tag external: true
+  test "zones", do: assert_ok(WoW.zones)
+  @tag external: true
+  test "zone", do: assert_ok(WoW.zone(4131))
 
-  # # Misc. Data
+  # Misc. Data
   @tag external: true
   test "battlegroups", do: assert_ok(WoW.battlegroups)
   @tag external: true

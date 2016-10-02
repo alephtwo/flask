@@ -24,12 +24,19 @@ defmodule Flask do
     case call "auction/data/#{realm}" do
       {:ok, response} ->
         data_url = response[:files] |> List.first |> Map.get("url")
-        case HTTPoison.get(data_url) do
-          {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
-            {:ok, Poison.decode!(body)}
-          {:error, %HTTPoison.Error{reason: reason}} ->
-            {:error, reason}
+        get_auctions(data_url)
+    end
+  end
+  defp get_auctions(data_url) do
+    case HTTPoison.get(data_url) do
+      {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
+        m = Poison.decode!(body)
+        case is_map(m) && Map.has_key?(m, "auctions") do
+          true -> {:ok, m["auctions"]}
+          _ -> {:error, "Invalid response from Battle.net API"}
         end
+      {:error, %HTTPoison.Error{reason: reason}} ->
+        {:error, reason}
     end
   end
 

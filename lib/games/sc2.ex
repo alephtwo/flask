@@ -1,4 +1,4 @@
-defmodule SC2 do
+defmodule Flask.SC2 do
   @moduledoc """
   Interface to the Battle.net Starcraft 2 API.
   """

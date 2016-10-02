@@ -4,6 +4,18 @@ defmodule Flask.WoW do
   """
   alias Flask.API, as: API
 
+  defmacro unwrap(call, atom) do
+    quote do
+      result = with {:ok, r} <- unquote(call),
+                    do: Keyword.get(r, unquote(atom))
+      if result == nil do
+        {:error, "Unable to extract result"}
+      else
+        {:ok, result}
+      end
+    end
+  end
+
   # Achievements
   def achievement(id) when is_integer(id), do: call "achievement/#{id}"
 
@@ -23,11 +35,12 @@ defmodule Flask.WoW do
 
   # Bosses
   def boss(id), do: call "boss/#{id}"
-  def bosses, do: call "boss/" # Note the trailing slash
+  def bosses, do: unwrap(call("boss/"), :bosses)
 
   # Challenge Mode
-  def realm_leaderboard(realm), do: call "challenge/#{realm}"
-  def region_leaderboard, do: call "challenge/region"
+  # These functions are commented out since the calls take forever to finish.
+  # def realm_leaderboard(realm), do: call "challenge/#{realm}"
+  # def region_leaderboard, do: call "challenge/region"
 
   # Character Profile
   def character(realm, name), do: character(realm, name, [])
@@ -77,10 +90,10 @@ defmodule Flask.WoW do
   def item_set(id), do: call "item/set/#{id}"
 
   # Mounts
-  def mounts, do: call "mount/"
+  def mounts, do: unwrap(call("mount/"), :mounts)
 
   # Pets
-  def pets, do: call "pet/"
+  def pets, do: unwrap(call("pet/"), :pets)
   def pet_abilities(id), do: call "pet/ability/#{id}"
   def pet_species(id), do: call "pet/species/#{id}"
   def pet_stats(id), do: call "pet/stats/#{id}"
@@ -102,7 +115,7 @@ defmodule Flask.WoW do
   def realms, do: realm_status([])
   def realm_status(inquiry) do
     queries = %{realms: inquiry |> List.wrap |> Enum.join(",")}
-    call "realm/status", queries
+    unwrap(call("realm/status", queries), :realms)
   end
 
   # Recipes
@@ -112,20 +125,24 @@ defmodule Flask.WoW do
   def spell(id), do: call "spell/#{id}"
 
   # Zones
-  def zones, do: call "zone/"
+  def zones, do: unwrap(call("zone/"), :zones)
   def zone(id), do: call "zone/#{id}"
 
   # Misc. Data
-  def battlegroups, do: call "data/battlegroups/" # Note the trailing slash
-  def character_races, do: call "data/character/races"
-  def character_classes, do: call "data/character/classes"
-  def character_achievements, do: call "data/character/achievements"
-  def guild_rewards, do: call "data/guild/rewards"
-  def guild_perks, do: call "data/guild/perks"
-  def guild_achievements, do: call "data/guild/achievements"
-  def item_classes, do: call "data/item/classes"
+  def battlegroups, do: unwrap(call("data/battlegroups/"), :battlegroups)
+  def character_races, do: unwrap(call("data/character/races"), :races)
+  def character_classes, do: unwrap(call("data/character/classes"), :classes)
+  def character_achievements do
+    unwrap(call("data/character/achievements"), :achievements)
+  end
+  def guild_rewards, do: unwrap(call("data/guild/rewards"), :rewards)
+  def guild_perks, do: unwrap(call("data/guild/perks"), :perks)
+  def guild_achievements do
+    unwrap(call("data/guild/achievements"), :achievements)
+  end
+  def item_classes, do: unwrap(call("data/item/classes"), :classes)
   def talents, do: call "data/talents"
-  def pet_types, do: call "data/pet/types"
+  def pet_types, do: unwrap(call("data/pet/types"), :petTypes)
 
   # Private helpers
   defp call(endpoint), do: call(endpoint, %{})

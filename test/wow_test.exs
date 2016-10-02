@@ -10,6 +10,7 @@ defmodule FlaskTest.WoW do
 
   # Auctions
   @tag external: true
+  @tag timeout: 120000
   test "auctions", do: assert_ok(WoW.auctions("mal'ganis"))
 
   # Bosses
@@ -19,9 +20,13 @@ defmodule FlaskTest.WoW do
   test "bosses", do: assert_ok(WoW.bosses)
 
   # Challenge Mode
-  # TODO: These time out for right now.
-  # def realm_leaderboard(realm), do: call "challenge/#{realm}"
-  # def region_leaderboard, do: call "challenge/region"
+  # These tests are commented out since these API calls take forever to finish.
+  # @tag external: true
+  # @tag timeout: 180000
+  # test "realm_leaderboard", do: assert_ok(WoW.realm_leaderboard("mal'ganis"))
+  # @tag external: true
+  # @tag timeout: 120000
+  # test "region_leaderboard", do: assert_ok(WoW.region_leaderboard)
 
   # Character Profile
   @tag external: true
@@ -32,10 +37,8 @@ defmodule FlaskTest.WoW do
   test "guild", do: assert_ok(WoW.guild("mal'ganis", "elitist jerks"))
 
   # Items
-  # def item(id), do: call "item/#{id}"
   @tag external: true
   test "item", do: assert_ok(WoW.item(16833))
-  # def item_set(id), do: call "item/set/#{id}"
   @tag external: true
   test "item_set", do: assert_ok(WoW.item_set(1060))
 

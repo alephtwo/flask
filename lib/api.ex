@@ -9,7 +9,6 @@ defmodule Flask.API do
   def fetch(endpoint, queries \\ %{}) do
     q = Map.merge(queries, auth_queries)
     url = "#{Config.api_url}#{endpoint}?#{URI.encode_query(q)}"
-    if Config.debug, do: IO.puts(url)
     handle_body(Map.get(get!(url), :body))
   end
 

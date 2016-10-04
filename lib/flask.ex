@@ -93,7 +93,12 @@ defmodule Flask do
   end
 
   # Items
-  def item(id), do: call "item/#{id}"
+  def item(id) do
+    case call "item/#{id}" do
+      {:ok, item} -> {:ok, Enum.into(item, %{})}
+      fallback -> fallback
+    end
+  end
   def item_set(id), do: call "item/set/#{id}"
 
   # Mounts

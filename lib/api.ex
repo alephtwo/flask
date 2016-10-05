@@ -11,14 +11,9 @@ defmodule Flask.API do
     q = Map.merge(queries, auth_queries)
     url = "#{Config.api_url}#{endpoint}?#{URI.encode_query(q)}"
     Logger.debug url
-    try do
-      get!(url, [], [timeout: Config.timeout])
-      |> Map.get(:body)
-      |> handle_body
-    rescue
-      e in HTTPoison.Error ->
-        Logger.error "Encountered error accessing #{url} [#{inspect(e)}]"
-        {:error, e}
+    case get(url, [], [timeout: Config.timeout]) do
+      {:ok, response} -> handle_response(response)
+      other -> other
     end
   end
 
@@ -28,14 +23,10 @@ defmodule Flask.API do
     |> Enum.map(fn({k, v}) -> {String.to_atom(k), v} end)
   end
 
-  defp handle_body(body) do
-    # Handle errors gracefully!
-    case body do
-      # Rejected
-      [code: c, detail: d, type: t] -> {:error, "#{c} #{t} (#{d})"}
-      # Error
-      [reason: r, status: _] -> {:error, "#{r}"}
-      # It worked?
+  defp handle_response(response) do
+    case Map.get(response, :body) do
+      [code: c, detail: d, type: t] -> {:error, %{code: c, detail: d, type: t}}
+      [reason: r, status: s] -> {:error, %{reason: r, status: s}}
       body -> {:ok, body}
     end
   end

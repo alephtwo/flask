@@ -3,18 +3,23 @@ defmodule Flask.API do
   The base interface with the Battle.net API.
   """
   use HTTPoison.Base
+  require Logger
 
   alias Flask.Config, as: Config
 
   def fetch(endpoint, queries \\ %{}) do
     q = Map.merge(queries, auth_queries)
     url = "#{Config.api_url}#{endpoint}?#{URI.encode_query(q)}"
-
-    if Config.debug, do: IO.puts url
-
-    get!(url, [], [timeout: Config.timeout])
-    |> Map.get(:body)
-    |> handle_body
+    Logger.debug url
+    try do
+      get!(url, [], [timeout: Config.timeout])
+      |> Map.get(:body)
+      |> handle_body
+    rescue
+      e in HTTPoison.Error ->
+        Logger.error "Encountered error accessing #{url} [#{inspect(e)}]"
+        {:error, e}
+    end
   end
 
   def process_response_body(body) do

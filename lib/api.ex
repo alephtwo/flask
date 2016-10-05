@@ -17,10 +17,11 @@ defmodule Flask.API do
     end
   end
 
-  def process_response_body(body) do
-    body
-    |> Poison.decode!
-    |> Enum.map(fn({k, v}) -> {String.to_atom(k), v} end)
+  def process_response_body(json) do
+    case Poison.decode(json) do
+      {:ok, body} -> Enum.map(body, fn({k, v}) -> {String.to_atom(k), v} end)
+      {:error, msg} -> {:error, msg}
+    end
   end
 
   defp handle_response(response) do

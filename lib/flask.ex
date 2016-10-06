@@ -99,7 +99,12 @@ defmodule Flask do
       fallback -> fallback
     end
   end
-  def item_set(id), do: call "item/set/#{id}"
+  def item_set(id) do
+    case call "item/set/#{id}" do
+      {:ok, set} -> {:ok, Enum.into(set, %{})}
+      fallback -> fallback;
+    end
+  end
 
   # Mounts
   def mounts, do: unwrap(call("mount/"), :mounts)

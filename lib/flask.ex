@@ -95,7 +95,7 @@ defmodule Flask do
   # Items
   def item(id) do
     case call "item/#{id}" do
-      {:ok, item} -> {:ok, Enum.into(item, %{})}
+      {:ok, i} -> {:ok, Enum.into(i, %{})}
       fallback -> fallback
     end
   end

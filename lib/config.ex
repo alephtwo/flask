@@ -6,5 +6,5 @@ defmodule Flask.Config do
   def locale, do: Application.get_env(:flask, :locale) || "en_US"
   def region, do: Application.get_env(:flask, :region) || "us"
   def timeout, do: Application.get_env(:flask, :timeout) || 30_000
-  def api_url, do: "https://#{region}.api.battle.net"
+  def api_url, do: "https://#{Flask.Config.region}.api.battle.net"
 end

@@ -8,7 +8,10 @@ defmodule Flask.API do
   alias Flask.Config, as: Config
 
   def fetch(endpoint, queries \\ %{}) do
-    q = Map.merge(queries, auth_queries)
+    q = Map.merge(queries, %{
+      apikey: Config.api_key,
+      locale: Config.locale
+    })
     url = "#{Config.api_url}#{endpoint}?#{URI.encode_query(q)}"
     Logger.debug url
     case get(url, [], [timeout: Config.timeout]) do
@@ -30,12 +33,5 @@ defmodule Flask.API do
       [reason: r, status: s] -> {:error, %{reason: r, status: s}}
       body -> {:ok, body}
     end
-  end
-
-  defp auth_queries do
-    %{
-      apikey: Config.api_key,
-      locale: Config.locale
-    }
   end
 end

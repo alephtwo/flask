@@ -4,7 +4,7 @@ defmodule Flask.Mixfile do
   def project do
     [app: :flask,
      version: "0.1.0",
-     elixir: "~> 1.3",
+     elixir: "~> 1.4",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps()]
@@ -16,9 +16,9 @@ defmodule Flask.Mixfile do
 
   defp deps do
     [
-      {:httpoison, "~> 0.9.2"},
-      {:poison, "~> 2.2.0"},
-      {:credo, "~> 0.4", only: [:dev, :test]}
+      {:httpoison, "~> 0.11.0"},
+      {:poison, "~> 3.1.0"},
+      {:credo, "~> 0.6", only: [:dev, :test]}
     ]
   end
 end
